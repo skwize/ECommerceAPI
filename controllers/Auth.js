@@ -2,9 +2,44 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
 
+function genToken (data){
+    const payload = {
+        id: data.id,
+        email: data.email,
+    }
+
+    return jwt.sign(payload, 'secret', {expiresIn: '3d'})
+}
+
 module.exports = {
     signIn: async (req,res,next)=>{
-        res.send("Coming soon")
+        if(Object.keys(req.body).length === 0){
+            return res.status(400).json({
+                error: "Bad Request"
+            })
+        }
+
+        const {email, password} = req.body
+
+        const candidate = await User.findOne({where: {email: email}})
+
+        if(!candidate){
+            return res.json({
+                error: "Incorrect email"
+            })
+        }
+
+        if(!await bcrypt.compare(password, candidate.password)){
+            return res.json({
+                error: "Incorrect password"
+            })
+        }
+
+        res.json({
+            token: genToken(candidate)
+        })
+
+
     },
     signUp: async (req, res, next) => {
         try {
@@ -13,13 +48,17 @@ module.exports = {
             }
             const {username, email, password} = req.body
             const hash = await bcrypt.hash(password, 7)
-            const newUser = await User.create({
+
+            await User.create({
                 username: username,
                 email: email,
                 password: hash
+            }).then(user=>{
+                res.json({
+                    token: genToken(user)
+                })
             })
 
-            res.status(201).send(newUser)
         } catch (err) {
             next(err)
         }

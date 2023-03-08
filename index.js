@@ -6,10 +6,9 @@ const bodyParser = require("body-parser")
 const sequelize = require("./utils/sequelize")
 const passport = require("passport")
 const jwtStr = require("./utils/PassportJwtStrategy")
-const jwt = require("jsonwebtoken")
 
 
-const { AuthRoute, UserRoute } = require("./routes")
+const { AuthRoute, UserRoute, ProductRoute } = require("./routes")
 
 
 const app = express()
@@ -26,11 +25,7 @@ passport.use(jwtStr)
 
 app.use('/auth', AuthRoute)
 app.use('/user', UserRoute)
-app.get('/jwt', (req, res)=>{
-  res.send(
-    jwt.sign({id:"asd1w4v224"}, 'secret', {expiresIn:'10min'})
-  )
-})
+app.use('/products', ProductRoute)
 
 
 

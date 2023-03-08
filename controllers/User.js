@@ -2,25 +2,7 @@ const User = require("../models/User")
 
 
 module.exports = {
-    newUser: async (req, res, next) => {
-        try {
-            const {username, email, password, orders = 0, cart = 0, createdAt} = req.body
-            await User.create({
-                username: username,
-                email: email,
-                password: password,
-                orders: orders,
-                cart: cart,
-                createdAt: createdAt
-            }).then(r=>{
-                res.send(r)
-            })
-
-        } catch (err) {
-            next(err)
-        }
-    },
-
+    
     check: async (req, res, next)=> {
         try {
             console.log(req.body, req.file)
@@ -31,7 +13,7 @@ module.exports = {
 
     find: async (req, res, next) => {
         try {
-            const user = await User.findByPk(1)
+            const user = await User.findByPk(req.user.id)
             res.send(user)
         } catch (err) {
             next(err)

@@ -23,9 +23,6 @@ const User = sequelize.define('User', {
     orders: {
         type: DataTypes.INTEGER,
     },
-    cart: {
-        type: DataTypes.INTEGER,
-    },
     createdAt: {
         type: DataTypes.DATEONLY,
         allowNull: false,
