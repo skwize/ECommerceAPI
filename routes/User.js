@@ -5,7 +5,7 @@ const controller = require("../controllers/User")
 let upload = multer({dest: `../public/`})
 
 // Will be deleted
-router.post('/check', upload.single('avatar'), controller.check)
+router.get('/check', passport.authenticate('jwt', {session: false}), controller.check)
 
 // find user by PK
 router.get('/find', upload.single('avatar'), controller.find)

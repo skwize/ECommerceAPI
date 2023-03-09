@@ -5,7 +5,7 @@ module.exports = {
     
     check: async (req, res, next)=> {
         try {
-            console.log(req.body, req.file)
+            res.send(req.user)
         } catch (err) {
             next()
         }
