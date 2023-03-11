@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize")
 const sequelize = require("../utils/sequelize")
 
-const User = sequelize.define('User', {
+const UserModel = sequelize.define('User', {
     id:{
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -22,6 +22,18 @@ const User = sequelize.define('User', {
     },
     orders: {
         type: DataTypes.INTEGER,
+        /* references: {
+            model: 'Orders',
+            key: 'id'
+        } */
+    },
+    user_role: {
+        type: DataTypes.INTEGER,
+       /*  references: {
+            model: 'Roles',
+            key: 'id'
+        }, */
+        allowNull: false
     },
     createdAt: {
         type: DataTypes.DATEONLY,
@@ -29,4 +41,4 @@ const User = sequelize.define('User', {
     },
 })
 
-module.exports = User
+module.exports = UserModel

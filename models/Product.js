@@ -18,22 +18,27 @@ const ProductModel = sequelize.define('Products', {
     product_category: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
+        /* references: {
             model: 'Categories',
             key: 'id'
-        }
+        } */
     },
     price: {
         type: DataTypes.FLOAT,
         allowNull: false,
     },
-    count: DataTypes.INTEGER,
+    quantity: {
+        type: DataTypes.INTEGER
+    },
     reviews: {
         type: DataTypes.INTEGER,
-        references: {
+        /* references: {
             model: 'Reviews',
             key: 'id'
-        }
+        } */
+    },
+    average_rate: {
+        type: DataTypes.FLOAT
     }
 
 })

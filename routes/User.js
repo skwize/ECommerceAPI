@@ -4,10 +4,15 @@ const passport = require("passport")
 const controller = require("../controllers/User")
 let upload = multer({dest: `../public/`})
 
-// Will be deleted
-router.get('/check', passport.authenticate('jwt', {session: false}), controller.check)
+// Get user data
+router.get('/',/*  passport.authenticate('jwt', {session: false}), */ controller.getData)
+// Get data of other User
+router.get('/',/*  passport.authenticate('jwt', {session: false}), */ controller.getOtherUser)
 
-// find user by PK
-router.get('/find', upload.single('avatar'), controller.find)
+// User settings routes
+router.patch('/settings/avatar/upload', upload.single('avatar'), controller.settings.changeAvatar)
+router.patch('/settings/email/change', /* Here must be a passport-jwt but my database is empty :D */ controller.settings.changeEmail)
+router.patch('/settings/username/change', /* Here must be a passport-jwt but my database is empty :D */ controller.settings.changeUsername)
+router.patch('/settings/password/change', /* Here must be a passport-jwt but my database is empty :D */ controller.settings.changePassword)
 
 module.exports = router

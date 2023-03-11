@@ -7,8 +7,17 @@ const sequelize = require("./utils/sequelize")
 const passport = require("passport")
 const jwtStr = require("./utils/PassportJwtStrategy")
 
+// Import routes
+const {
+  AuthRoute,
+  UserRoute,
+  ProductRoute,
+  ReviewRoute
+} = require("./routes")
 
-const { AuthRoute, UserRoute, ProductRoute } = require("./routes")
+// Import custom middlewares
+const ReqBodyIsExist = require('./middlewares/CheckReqBody')
+const ErrorHandler = require('./middlewares/ErrorHandler')
 
 
 const app = express()
@@ -23,15 +32,18 @@ app.use(helmet())
 
 passport.use(jwtStr)
 
+app.use(ReqBodyIsExist)
+
 app.use('/auth', AuthRoute)
 app.use('/user', UserRoute)
 app.use('/products', ProductRoute)
+app.use('/reviews', ReviewRoute)
 
+// Admin panel routes
+app.use('/admin/products', ProductRoute)
 
-
-
-
-
+app.use(app._router)
+app.use(ErrorHandler)
 
 
 

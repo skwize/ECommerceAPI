@@ -1,27 +1,20 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const User = require('../models/User')
+const { UserModel } = require('../models/models')
 
 function genToken (data){
     const payload = {
         id: data.id,
         email: data.email,
     }
-
     return jwt.sign(payload, 'secret', {expiresIn: '3d'})
 }
 
 module.exports = {
-    signIn: async (req,res,next)=>{
-        if(Object.keys(req.body).length === 0){
-            return res.status(400).json({
-                error: "Bad Request"
-            })
-        }
-
+    signIn: async (req,res,next) => {
         const {email, password} = req.body
 
-        const candidate = await User.findOne({where: {email: email}})
+        const candidate = await UserModel.findOne({where: {email: email}})
 
         if(!candidate){
             return res.json({
@@ -43,17 +36,16 @@ module.exports = {
     },
     signUp: async (req, res, next) => {
         try {
-            if(!req.body){
-                return res.send("Bad Request")
-            }
+
             const {username, email, password} = req.body
             const hash = await bcrypt.hash(password, 7)
 
-            await User.create({
+            await UserModel.create({
                 username: username,
                 email: email,
                 password: hash
-            }).then(user=>{
+            })
+            .then(user => {
                 res.json({
                     token: genToken(user)
                 })
